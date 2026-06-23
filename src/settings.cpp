@@ -37,7 +37,7 @@ void settings::load() {
 				abort();
 			}
 
-			state = 1;
+			state = PAIR;
 			continue;
 		}
 
@@ -53,6 +53,9 @@ void settings::load() {
 			state = GROUP_END;
 			continue;
 		}
+
+		if (c == '\r')
+			continue;
 
 		if (c == '\n') {
 			if ((state == BEGIN && !key.empty()) || state == GROUP) {
@@ -89,6 +92,15 @@ void settings::load() {
 	}
 
 	file_stream.close();
+
+	if (state == GROUP) {
+		abort();
+	}
+
+	if (!key.empty() && !value.empty()) {
+		group = trim(group);
+		groups[group][trim(key)] = value;
+	}
 }
 
 std::string settings::trim(std::string str) {
