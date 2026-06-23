@@ -117,10 +117,10 @@ bool standby_server::send_magic_packet() {
 }
 
 bool standby_server::compare_url(std::string &url, const char *endpoint) {
-	bool result = strncasecmp(url.c_str(), endpoint, url.size()) == 0;
+	bool result = strcasecmp(url.c_str(), endpoint) == 0;
 
 	if (!result && strcmp(endpoint, "/") != 0 && 
-			strncasecmp(url.c_str(), (std::string(endpoint) + "/").c_str(), url.size()) == 0) {
+			strcasecmp(url.c_str(), (std::string(endpoint) + "/").c_str()) == 0) {
 		result = true;
 	}
 
