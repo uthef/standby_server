@@ -48,7 +48,7 @@ void standby_server::handle_request(http_server::request &request_data, http_ser
 	if (base_url_path != "/")
 		clean_url = request_data.url.substr(base_url_path.size());
 
-	if (compare_url(clean_url, "/")) {
+	if (compare_url(clean_url, "/") || compare_url(clean_url, "")) {
 		if (request_data.method != "GET") {
 			response_data.code = 405;
 			return;
