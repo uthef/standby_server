@@ -139,11 +139,11 @@ void unix_tcp_server::handle_client(int sockd) {
 }
 
 int unix_tcp_server::read(int sockd, char *buffer, size_t buffer_size) {
-	return recv(sockd, buffer, buffer_size, 0);
+	return recv(sockd, buffer, buffer_size, MSG_NOSIGNAL);
 }
 
 int unix_tcp_server::send(int sockd, const char *buffer, size_t buffer_size) {
-	return ::send(sockd, buffer, buffer_size, 0);
+	return ::send(sockd, buffer, buffer_size, MSG_NOSIGNAL);
 }
 
 void unix_tcp_server::stop_polling() {
