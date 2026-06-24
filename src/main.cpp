@@ -2,6 +2,7 @@
 #include <standby_server.hpp>
 #include <settings.hpp>
 #include <iostream>
+#include <endpoint.hpp>
 #include <filesystem>
 
 void handle_interruption(int);
@@ -35,15 +36,14 @@ int main(const int argc, const char **argv) {
 
 	uthef::standby_server server(tcp_socket.c_str());
 	st_server = &server;
-	server.base_url = config.get("base_url");
-	server.remote_ip = config.get("remote_ip");
-	server.redirect_url = config.get("redirect_url");
 
-	if (!config.get("remote_mac").empty()) {
-		if (!server.set_remote_mac(config.get("remote_mac").c_str())) {
-			std::cerr << "Invalid MAC address" << std::endl;
-			exit(-1);
-		}
+	server.base_url = config.get("base_url");
+
+	server.parse_endpoints(config);
+
+	if (!config.get("user").empty() && !config.get("password").empty()) {
+		server.set_credentials(config.get("user"), config.get("password"));
+		std::cout << "Credentials are set" << std::endl;
 	}
 
 	server.listen();
@@ -66,6 +66,7 @@ void handle_interruption(int signal) {
 
 	if (st_server) {
 		st_server->get_udp_client()->close();
+		st_server->clear_endpoints();
 		st_server->close();
 	}
 

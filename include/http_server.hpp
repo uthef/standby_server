@@ -27,10 +27,10 @@ public:
 	};
 
 	http_server(const char *file_name, unsigned int max_clients = 128);
+	static void decode_url(std::string &str);
 protected:
 	void handle_client(int sockd) override;
 	virtual void handle_request(request &request_data, response &response_data);
-	static void decode_url(std::string &str);
 private:
 	bool parse_request(const char *buffer, size_t buffer_size, request &out_request);
 	void write_response(std::stringstream &stream, response &response_data);

@@ -18,7 +18,7 @@ void settings::load() {
 		exit(-1);
 	}
 	
-	enum { BEGIN = 0, PAIR = 1, GROUP = 2, GROUP_END = 3 };
+	enum { BEGIN = 0, PAIR = 1, GROUP = 2, GROUP_END = 3, COMMENT = 4 };
 
 	std::string key, value, group;
 	int state = BEGIN;
@@ -28,6 +28,14 @@ void settings::load() {
 
 		if (c == -1)
 			break;
+
+		if (state == COMMENT && c != '\n')
+			continue;
+
+		if (state == BEGIN && c == '#' && key.empty()) {
+			state = COMMENT;
+			continue;
+		}
 
 		if (state == BEGIN && (c == ' ' || c == '\t'))
 			continue;
