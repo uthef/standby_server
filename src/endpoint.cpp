@@ -53,8 +53,12 @@ void wake_redir_endpoint::set_ip(std::string ip) {
 }
 
 bool wake_redir_endpoint::set_mac(std::string mac) {
-	this->mac = mac;
-	return build_magic_datagram(mac.c_str(), packet);
+	bool result = build_magic_datagram(mac.c_str(), packet);
+
+	if (result)
+		this->mac = mac;
+
+	return result;
 }
 
 void wake_redir_endpoint::set_redirect_url(std::string url) {
